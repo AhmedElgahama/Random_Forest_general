@@ -21,7 +21,7 @@ RUN R -e \
     "install.packages( \
         'https://cran.r-project.org/src/contrib/Archive/randomForest/randomForest_4.6-14.tar.gz', \
         repos = NULL, \
-        type='source'
+        type='source' \
     )"
     
 RUN R -e \
