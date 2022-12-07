@@ -8,14 +8,7 @@ WORKDIR /opt/app
 # Install binaries (see https://datawookie.netlify.com/blog/2019/01/docker-images-for-r-r-base-versus-r-apt/)
 COPY ./requirements-bin.txt .
 RUN cat requirements-bin.txt | xargs apt-get install -y -qq
-
-RUN R -e \
-    "install.packages( \
-        'https://cran.r-project.org/src/contrib/Archive/randomForest/randomForest_4.6-14.tar.gz', \
-        repos = NULL, \
-        type='source' \
-    )"
-    
+   
 # Install remaining packages from source (these dont have binaries)
 COPY ./requirements-src.R .
 RUN Rscript requirements-src.R
