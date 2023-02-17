@@ -107,6 +107,10 @@ encode_these   <- trained_model$variables_to_encode
 target_class          <- trained_model$target_class
 other_class           <- trained_model$other_class
 id_column             <- trained_model$id_column
+imputations_n         <- trained_model$imputations_n
+imputations_c         <- trained_model$imputations_c
+variables_to_encode   <- trained_model$variables_to_encode
+variables_numeric   <- trained_model$variables_numeric
 threshold <- 0.50
 
 
@@ -156,6 +160,17 @@ function(req) {
   names(row) = make.names(names(row),unique = TRUE)
   
   ids <- row %>% select(id_column)
+  
+  for( i in variables_to_encode)
+  {
+    row[[i]] <- row[[i]] %>% replace_na(imputations_c[[i]])
+  }
+  
+  for( i in variables_numeric)
+  {
+    row[[i]] <- row[[i]] %>% replace_na(imputations_n[[i]])
+  }
+  
   ## placeholder for JSON string to be printed at the end
   result <-
     tibble(
