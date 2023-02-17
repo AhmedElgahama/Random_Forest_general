@@ -126,6 +126,9 @@ trainer <- function(schema_path, data_path)
   id     <- full_data[, id_column]
   target <- full_data[, target_column]
   
+  imputations_n <- sapply(full_data[variables_numeric], mean,na.rm = TRUE, 2)
+  imputations_c <- sapply(full_data[variables_to_encode], calc_mode)
+
   ## Impute missing values
   ## With mean for numeric fields
   ## And mode for categorical fields
@@ -215,6 +218,8 @@ trainer <- function(schema_path, data_path)
   trained_model$variables_to_encode <- variables_to_encode
   trained_model$variables_numeric <- variables_numeric
   trained_model$encodings <- encodings
+  trained_model$imputations_n <- imputations_n
+  trained_model$imputations_c <- imputations_c
   trained_model %>% write_rds('/opt/ml_vol/model/artifacts/model.rds')
 }
 
