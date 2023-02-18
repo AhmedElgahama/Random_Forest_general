@@ -97,9 +97,9 @@ test_json_string <-
 suppressWarnings(suppressMessages(library(tidyverse)))
 suppressWarnings(suppressMessages(library(lubridate)))
 suppressWarnings(suppressMessages(library(data.table)))
-suppressWarnings(suppressMessages(library(xgboost)))
 suppressWarnings(suppressMessages(library(httr)))
 suppressWarnings(suppressMessages(library(glue)))
+suppressWarnings(suppressMessages(library(randomForest)))
 
 ## Load model
 trained_model  <- read_rds('/opt/ml_vol/model/artifacts/model.rds')
@@ -141,7 +141,7 @@ prediction_scorer <- function(row) {
   score <-
     predict(trained_model$mdl,
             data.matrix(row %>% select(
-              all_of(trained_model$mdl$feature_names)
+              all_of(trained_model$exp_vars)
             )))
   
   ## return prediction
@@ -163,11 +163,13 @@ function(req) {
   
   for( i in variables_to_encode)
   {
+    row[[i]] <- sapply(row[[i]], as.character)
     row[[i]] <- row[[i]] %>% replace_na(imputations_c[[i]])
   }
   
   for( i in variables_numeric)
   {
+    row[[i]] <- sapply(row[[i]], as.numeric)
     row[[i]] <- row[[i]] %>% replace_na(imputations_n[[i]])
   }
   
@@ -180,7 +182,7 @@ function(req) {
     )
   
   ## parameters that we need
-  necessary_params <- trained_model$mdl$feature_names
+  necessary_params <- trained_model$exp_vars
   
   ## if we do NOT have all we need...
   if (!all(necessary_params %in% names(row))) {
@@ -201,7 +203,7 @@ function(req) {
               null_parameters)
       
     } else {
-      predicted_class_prob <- prediction_scorer(row)
+      predicted_class_prob <- prediction_scorer(row) %>% as.vector() %>% as.numeric()
       print(predicted_class_prob)
       predicted_class <-
         if_else(predicted_class_prob >= 0.5 ,
