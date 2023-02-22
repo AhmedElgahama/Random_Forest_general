@@ -113,7 +113,7 @@ trainer <- function(schema_path, data_path)
   ## Reading training data and dropping any row with no lablel
   
   full_data <-
-    read_csv(data_path) %>% drop_na(target_column)
+    read_csv(data_path,col_types = cols(.default = "c")) %>% drop_na(target_column)
   names(full_data) = make.names(names(full_data),unique = TRUE)
   
   
