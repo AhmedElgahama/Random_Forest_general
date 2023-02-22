@@ -42,7 +42,7 @@ tester <- function(data_path)
   exp_vars              <- trained_model$exp_vars
   imputations_n         <- trained_model$imputations_n
   imputations_c         <- trained_model$imputations_c
-  df_test             <- read_csv(data_path)
+  df_test             <- read_csv(data_path,col_types = cols(.default = "c"))
   names(df_test) = make.names(names(df_test),unique = TRUE)
   id <- df_test %>% select(id_column)
   
