@@ -44,6 +44,8 @@ tester <- function(data_path)
   imputations_c         <- trained_model$imputations_c
   df_test             <- read_csv(data_path,col_types = cols(.default = "c"))
   names(df_test) = make.names(names(df_test),unique = TRUE)
+  df_test[] <- lapply(df_test, gsub, pattern="'", replacement="")
+  
   id <- df_test %>% select(id_column)
   
   df_test[variables_to_encode] <-
