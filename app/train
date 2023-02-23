@@ -83,7 +83,7 @@ trainer <- function(schema_path, data_path)
   target_column       <-
     file$inputDatasets$binaryClassificationBaseMainInput$targetField
   target_class <-
-    file$inputDatasets$binaryClassificationBaseMainInput$targetClass
+    file$inputDatasets$binaryClassificationBaseMainInput$targetClass %>% as.character()
   features = file$inputDatasets$binaryClassificationBaseMainInput$predictorFields
   
   
@@ -115,7 +115,7 @@ trainer <- function(schema_path, data_path)
   full_data <-
     read_csv(data_path,col_types = cols(.default = "c")) %>% drop_na(target_column)
   names(full_data) = make.names(names(full_data),unique = TRUE)
-  
+  full_data[] <- lapply(full_data, gsub, pattern="'", replacement="")
   
   ## Changing datatype of categorical and numeric variables as received from json file
   full_data[variables_to_encode] <-
