@@ -25,12 +25,12 @@ source('algorithm/0.common_funcs.R')
 
 ## get the json file for the schema
 schema <-
-  glue('/opt/ml_vol/inputs/data_config/',
+  paste0('/opt/ml_vol/inputs/data_config/',
        list.files(path = "/opt/ml_vol/inputs/data_config"))
 
 ## Get the training data file
 data   <-
-  glue(
+  paste0(
     '/opt/ml_vol/inputs/data/training/binaryClassificationBaseMainInput/',
     list.files(path = "/opt/ml_vol/inputs/data/training/binaryClassificationBaseMainInput")
   )
