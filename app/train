@@ -199,12 +199,7 @@ trainer <- function(schema_path, data_path)
   ## Training model model
   ## The return of the function is list with model
   
-  df_train <- df_train %>% mutate(across(where(is.numeric), ~replace_na(., mean(., na.rm=TRUE))))
-  df_val <- df_val %>% mutate(across(where(is.numeric), ~replace_na(., mean(., na.rm=TRUE))))
-  
-  
-  df_train <- df_train %>% mutate(across(where(is.character), ~replace_na(., calc_mode(.))))
-  df_val <- df_val %>% mutate(across(where(is.character), ~replace_na(., calc_mode(.))))
+
   
   trained_model <-
     trainer_func(
